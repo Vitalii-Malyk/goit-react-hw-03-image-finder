@@ -11,7 +11,7 @@ class Searchbar extends Component {
 
   сreateRequest = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state);
+    this.props.onSubmit(this.state.searchRequest);
     this.resetForm();
   };
 
