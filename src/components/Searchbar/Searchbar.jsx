@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
 
+import {
+  SearchbarEl,
+  SearchForm,
+  SearchFormInput,
+} from 'components/Searchbar/Searchbar.styled';
+import IconButtonStyle from 'components/IconButton/IconButton';
+
+import { ReactComponent as SearchIcon } from 'Icons/searchIcon.svg';
+
 class Searchbar extends Component {
   state = {
     searchRequest: '',
@@ -23,13 +32,12 @@ class Searchbar extends Component {
 
   render() {
     return (
-      <header className="searchbar">
-        <form className="form" onSubmit={this.сreateRequest}>
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
-
-          <input
+      <SearchbarEl className="searchbar">
+        <SearchForm className="form" onSubmit={this.сreateRequest}>
+          <IconButtonStyle type="submit" className="button">
+            <SearchIcon width="24px" height="24px" />
+          </IconButtonStyle>
+          <SearchFormInput
             className="input"
             type="text"
             autoComplete="off"
@@ -38,8 +46,8 @@ class Searchbar extends Component {
             onChange={this.handleChange}
             value={this.state.searchRequest}
           />
-        </form>
-      </header>
+        </SearchForm>
+      </SearchbarEl>
     );
   }
 }

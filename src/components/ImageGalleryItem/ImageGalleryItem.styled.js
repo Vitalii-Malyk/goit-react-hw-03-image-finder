@@ -1,4 +1,3 @@
-import { hover } from '@testing-library/user-event/dist/hover';
 import styled from 'styled-components';
 
 export const StyleGalleryItem = styled('li')(() => {
@@ -9,18 +8,15 @@ export const StyleGalleryItem = styled('li')(() => {
   };
 });
 
-export const StyleImg = styled('img')(() => {
-  return {
-    width: '100%',
-    height: '260px',
-    objectFit: 'cover',
-    transition: 'transform 250ms cubic-bezier(0.4, 0, 0.2, 1)',
-    display: 'block',
-    maxWidth: '100%',
-
-    //     &:hover: {
-    //   transform: 'scale(1.03)',
-    //   cursor: 'zoom-in',
-    // },
-  };
-});
+export const StyleImg = styled.img`
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  max-width: 100%;
+  &:hover {
+    transform: scale(1.03);
+    cursor: zoom-in;
+  }
+`;

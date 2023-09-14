@@ -2,46 +2,45 @@ import React, { Component } from 'react';
 
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGalary from './ImageGallery/ImageGallery';
-import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
-import { getImages } from 'services/getImages';
+
+import { AppEl } from 'components/App.styled';
 
 class App extends Component {
   state = {
     searchRequest: '',
-    images: [],
+    modalImg: '',
+    showModal: false,
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchRequest !== this.state.searchRequest) {
-      console.log(this.state);
-      console.log(prevState);
-      getImages(this.state.searchRequest)
-        .then(response => response.json())
-        .then(data => this.setState({ images: data.hits }));
-    }
-  }
 
   formSubmitHandler = searchRequest => {
     this.setState({ searchRequest: searchRequest });
   };
 
+  loadMoreBtn = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
+  getLargeImg = url => {
+    this.toggleModal();
+    this.setState({ modalImg: url });
+  };
+
   render() {
     return (
-      <div
-        style={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
+      <AppEl>
         <Searchbar onSubmit={this.formSubmitHandler} />
-        <ImageGalary>
-          <ImageGalleryItem images={this.state.images} />
-        </ImageGalary>
-      </div>
+        <ImageGalary
+          searchRequest={this.state.searchRequest}
+          onClick={this.getLargeImg}
+          loadMoreBtn={this.loadMoreBtn}
+        />
+      </AppEl>
     );
   }
 }
