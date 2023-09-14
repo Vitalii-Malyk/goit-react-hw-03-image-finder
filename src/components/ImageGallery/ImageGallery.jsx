@@ -52,6 +52,8 @@ export default class ImageGallery extends Component {
 
   render() {
     const { images, status, totalHits } = this.state;
+    const fff = totalHits <= this.props.page * 12;
+
     if (status === 'pending') {
       return <Loader />;
     }
@@ -61,14 +63,12 @@ export default class ImageGallery extends Component {
           <GalleryStyle className="Gallery">
             <ImageGalleryItem images={images} onClick={this.props.onClick} />
           </GalleryStyle>
-          {totalHits > 12 && (
+          {!fff && (
             <IconButtonLoadMore onClick={this.props.loadNextPage}>
               <SearchIcon width="32px" height="32px" />
               Load more...
             </IconButtonLoadMore>
           )}
-          {totalHits === 0 &&
-            alert('There are no images available for this request!')}
         </>
       );
   }
