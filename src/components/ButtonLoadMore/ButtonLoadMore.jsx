@@ -1,8 +1,12 @@
 import { IconButtonLoadMoreStyle } from 'components/ButtonLoadMore/ButtonLoadMore.styled';
 
-const IconButtonLoadMore = ({ children }) => (
-  <IconButtonLoadMoreStyle type="button" className="IconButtonLoadMore">
-    {children} Load more...
+const IconButtonLoadMore = ({ children, onClick }) => (
+  <IconButtonLoadMoreStyle
+    type="button"
+    className="IconButtonLoadMore"
+    onClick={onClick}
+  >
+    {children}
   </IconButtonLoadMoreStyle>
 );
 

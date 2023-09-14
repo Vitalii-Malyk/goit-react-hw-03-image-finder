@@ -5,6 +5,7 @@ import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import IconButtonLoadMore from 'components/ButtonLoadMore/ButtonLoadMore';
 import { ReactComponent as SearchIcon } from 'Icons/searchIcon.svg';
 import getImages from 'services/getImages';
+import Loader from 'components/Loader/Loader';
 
 export default class ImageGallery extends Component {
   state = {
@@ -16,8 +17,6 @@ export default class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchRequest !== this.props.searchRequest) {
       this.serverRequest();
-      // .then(response => response.json())
-      // .then(data => this.setState({ images: data.hits, data: data }));
     }
     if (prevProps.page !== this.props.page && this.props.page > 1) {
       this.serverRequestMore();
@@ -54,8 +53,7 @@ export default class ImageGallery extends Component {
   render() {
     const { images, status, totalHits } = this.state;
     if (status === 'pending') {
-      return;
-      // return <Loader />;
+      return <Loader />;
     }
     if (status === 'resolve')
       return (
@@ -63,10 +61,10 @@ export default class ImageGallery extends Component {
           <GalleryStyle className="Gallery">
             <ImageGalleryItem images={images} onClick={this.props.onClick} />
           </GalleryStyle>
-          ;
           {totalHits > 12 && (
-            <IconButtonLoadMore onClick={this.props.loadMoreBtn}>
+            <IconButtonLoadMore onClick={this.props.loadNextPage}>
               <SearchIcon width="32px" height="32px" />
+              Load more...
             </IconButtonLoadMore>
           )}
           {totalHits === 0 &&

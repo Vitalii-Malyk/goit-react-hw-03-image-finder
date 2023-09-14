@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGalary from './ImageGallery/ImageGallery';
+import Modal from 'components/Modal/Modal';
 
 import { AppEl } from 'components/App.styled';
 
@@ -10,13 +11,14 @@ class App extends Component {
     searchRequest: '',
     modalImg: '',
     showModal: false,
+    page: 1,
   };
 
   formSubmitHandler = searchRequest => {
     this.setState({ searchRequest: searchRequest });
   };
 
-  loadMoreBtn = () => {
+  loadNextPage = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
@@ -32,14 +34,17 @@ class App extends Component {
   };
 
   render() {
+    const { modalImg, showModal, page } = this.state;
     return (
       <AppEl>
         <Searchbar onSubmit={this.formSubmitHandler} />
         <ImageGalary
           searchRequest={this.state.searchRequest}
           onClick={this.getLargeImg}
-          loadMoreBtn={this.loadMoreBtn}
+          loadNextPage={this.loadNextPage}
+          page={page}
         />
+        {showModal && <Modal url={modalImg} onClose={this.toggleModal} />}
       </AppEl>
     );
   }
