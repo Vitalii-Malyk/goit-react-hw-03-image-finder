@@ -3,8 +3,6 @@ import { Component } from 'react';
 import { OverlayEl, ModalEl, ImgEl } from 'components/Modal/Modal.styled';
 
 export default class Modal extends Component {
-  state = {};
-
   componentDidMount() {
     window.addEventListener('keydown', this.clickEsc);
   }

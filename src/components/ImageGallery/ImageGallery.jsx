@@ -1,11 +1,13 @@
-import { GalleryStyle } from 'components/ImageGallery/ImageGallery.styled';
 import { Component } from 'react';
-import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import IconButtonLoadMore from 'components/ButtonLoadMore/ButtonLoadMore';
-import { ReactComponent as SearchIcon } from 'Icons/searchIcon.svg';
-import getImages from 'services/getImages';
 import Loader from 'components/Loader/Loader';
+import getImages from 'services/getImages';
+
+import { GalleryStyle } from 'components/ImageGallery/ImageGallery.styled';
+
+import { ReactComponent as SearchIcon } from 'Icons/searchIcon.svg';
 
 export default class ImageGallery extends Component {
   state = {
@@ -25,7 +27,7 @@ export default class ImageGallery extends Component {
 
   serverRequest = () => {
     const { searchRequest, page } = this.props;
-
+    this.setState({ status: 'pending' });
     getImages(searchRequest, page)
       .then(response => {
         this.setState({
@@ -39,7 +41,6 @@ export default class ImageGallery extends Component {
 
   serverRequestMore = () => {
     const { searchRequest, page } = this.props;
-
     getImages(searchRequest, page)
       .then(response => {
         this.setState(prevState => ({
@@ -52,18 +53,16 @@ export default class ImageGallery extends Component {
 
   render() {
     const { images, status, totalHits } = this.state;
-    const fff = totalHits <= this.props.page * 12;
-
+    const howManyPictures = totalHits <= this.props.page * 12;
     if (status === 'pending') {
       return <Loader />;
-    }
-    if (status === 'resolve')
+    } else if (status === 'resolve') {
       return (
         <>
           <GalleryStyle className="Gallery">
             <ImageGalleryItem images={images} onClick={this.props.onClick} />
           </GalleryStyle>
-          {!fff && (
+          {!howManyPictures && (
             <IconButtonLoadMore onClick={this.props.loadNextPage}>
               <SearchIcon width="32px" height="32px" />
               Load more...
@@ -71,5 +70,8 @@ export default class ImageGallery extends Component {
           )}
         </>
       );
+    } else if (status === 'rejected') {
+      return alert('error');
+    }
   }
 }

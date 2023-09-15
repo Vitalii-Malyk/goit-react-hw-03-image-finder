@@ -6,7 +6,7 @@ import Modal from 'components/Modal/Modal';
 
 import { AppEl } from 'components/App.styled';
 
-class App extends Component {
+export default class App extends Component {
   state = {
     searchRequest: '',
     modalImg: '',
@@ -49,5 +49,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
