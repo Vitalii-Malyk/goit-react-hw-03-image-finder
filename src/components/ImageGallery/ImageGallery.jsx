@@ -67,25 +67,19 @@ export default class ImageGallery extends Component {
       );
     } else if (status === 'pending') {
       return <Loader />;
-    } else if (totalHits > 0) {
+    } else if (totalHits === 'resolve') {
       return (
-        Notify.success(`Your search found ${totalHits} images.`, {
-          position: 'center-top',
-          timeout: 1000,
-        }),
-        (
-          <>
-            <GalleryStyle className="Gallery">
-              <ImageGalleryItem images={images} onClick={this.props.onClick} />
-            </GalleryStyle>
-            {!howManyPictures && (
-              <IconButtonLoadMore onClick={this.props.loadNextPage}>
-                <SearchIcon width="32px" height="32px" />
-                Load more...
-              </IconButtonLoadMore>
-            )}
-          </>
-        )
+        <>
+          <GalleryStyle className="Gallery">
+            <ImageGalleryItem images={images} onClick={this.props.onClick} />
+          </GalleryStyle>
+          {!howManyPictures && (
+            <IconButtonLoadMore onClick={this.props.loadNextPage}>
+              <SearchIcon width="32px" height="32px" />
+              Load more...
+            </IconButtonLoadMore>
+          )}
+        </>
       );
     } else if (status === 'rejected') {
       return Notify.failure('Error, try reloading the page!', {
