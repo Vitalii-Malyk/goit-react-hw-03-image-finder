@@ -67,7 +67,7 @@ export default class ImageGallery extends Component {
       );
     } else if (status === 'pending') {
       return <Loader />;
-    } else if (status === 'resolve') {
+    } else if (totalHits > 0) {
       return (
         Notify.success(`Your search found ${totalHits} images.`, {
           position: 'center-top',
