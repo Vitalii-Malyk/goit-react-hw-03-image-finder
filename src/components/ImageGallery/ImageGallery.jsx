@@ -67,7 +67,7 @@ export default class ImageGallery extends Component {
       );
     } else if (status === 'pending') {
       return <Loader />;
-    } else if (totalHits === 'resolve') {
+    } else if (status === 'resolve') {
       return (
         <>
           <GalleryStyle className="Gallery">
