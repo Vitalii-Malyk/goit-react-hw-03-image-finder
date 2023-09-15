@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import IconButtonLoadMore from 'components/ButtonLoadMore/ButtonLoadMore';
@@ -13,7 +14,7 @@ export default class ImageGallery extends Component {
   state = {
     images: [],
     status: 'idle',
-    totalHits: 0,
+    totalHits: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -54,24 +55,44 @@ export default class ImageGallery extends Component {
   render() {
     const { images, status, totalHits } = this.state;
     const howManyPictures = totalHits <= this.props.page * 12;
-    if (status === 'pending') {
+
+    if (totalHits === 0) {
+      return Notify.failure(
+        'There were no images found for your request. Try another request',
+        {
+          position: 'center-center',
+          timeout: 1500,
+          clickToClose: true,
+        }
+      );
+    } else if (status === 'pending') {
       return <Loader />;
     } else if (status === 'resolve') {
       return (
-        <>
-          <GalleryStyle className="Gallery">
-            <ImageGalleryItem images={images} onClick={this.props.onClick} />
-          </GalleryStyle>
-          {!howManyPictures && (
-            <IconButtonLoadMore onClick={this.props.loadNextPage}>
-              <SearchIcon width="32px" height="32px" />
-              Load more...
-            </IconButtonLoadMore>
-          )}
-        </>
+        Notify.success(`Your search found ${totalHits} images.`, {
+          position: 'center-top',
+          timeout: 1000,
+        }),
+        (
+          <>
+            <GalleryStyle className="Gallery">
+              <ImageGalleryItem images={images} onClick={this.props.onClick} />
+            </GalleryStyle>
+            {!howManyPictures && (
+              <IconButtonLoadMore onClick={this.props.loadNextPage}>
+                <SearchIcon width="32px" height="32px" />
+                Load more...
+              </IconButtonLoadMore>
+            )}
+          </>
+        )
       );
     } else if (status === 'rejected') {
-      return alert('error');
+      return Notify.failure('Error, try reloading the page!', {
+        position: 'center-center',
+        timeout: 1500,
+        clickToClose: true,
+      });
     }
   }
 }
