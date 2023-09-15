@@ -28,16 +28,18 @@ export default class ImageGallery extends Component {
 
   serverRequest = () => {
     const { searchRequest, page } = this.props;
-    this.setState({ status: 'pending' });
-    getImages(searchRequest, page)
-      .then(response => {
-        this.setState({
-          images: response.hits,
-          status: 'resolve',
-          totalHits: response.totalHits,
-        });
-      })
-      .catch(error => this.setState({ status: 'rejected' }));
+    if (searchRequest) {
+      this.setState({ status: 'pending' });
+      getImages(searchRequest, page)
+        .then(response => {
+          this.setState({
+            images: response.hits,
+            status: 'resolve',
+            totalHits: response.totalHits,
+          });
+        })
+        .catch(error => this.setState({ status: 'rejected' }));
+    } else return;
   };
 
   serverRequestMore = () => {
