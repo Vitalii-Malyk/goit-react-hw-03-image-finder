@@ -15,7 +15,7 @@ import { AppEl } from 'components/App.styled';
 
 export default class App extends Component {
   state = {
-    searchRequest: '',
+    searchRequest: null,
     images: [],
     modalImg: '',
     showModal: false,
@@ -25,40 +25,32 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchRequest !== this.state.searchRequest) {
+    if (
+      prevState.searchRequest !== this.state.searchRequest ||
+      prevState.page !== this.state.page
+    ) {
       this.serverRequest();
-    }
-    if (prevState.page !== this.state.page && this.state.page > 1) {
-      this.serverRequestMore();
     }
   }
 
   serverRequest = () => {
     const { searchRequest, page } = this.state;
     if (searchRequest) {
-      this.setState({ status: 'pending' });
       getImages(searchRequest, page)
         .then(response => {
-          this.setState({
-            images: response.hits,
-            totalHits: response.totalHits,
+          this.setState(prevState => ({
+            images: [...prevState.images, ...response.hits],
             status: 'resolve',
-          });
+            totalHits: response.totalHits,
+          }));
         })
         .catch(error => this.setState({ status: 'rejected' }));
-    } else return;
-  };
-
-  serverRequestMore = () => {
-    const { searchRequest, page } = this.state;
-    getImages(searchRequest, page)
-      .then(response => {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...response.hits],
-          status: 'resolve',
-        }));
-      })
-      .catch(error => this.setState({ status: 'rejected' }));
+    } else
+      return Notify.info('Make your search request!', {
+        position: 'center-center',
+        timeout: 1500,
+        clickToClose: true,
+      });
   };
 
   formSubmitHandler = searchRequest => {
@@ -81,7 +73,6 @@ export default class App extends Component {
   };
 
   render() {
-    console.log(this.state);
     const { modalImg, showModal, images, status, totalHits } = this.state;
     const howManyPictures = totalHits <= this.state.page * 12;
     const paramsNotifyFailure = {
